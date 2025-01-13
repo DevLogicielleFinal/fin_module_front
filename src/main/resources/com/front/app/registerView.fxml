@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/11.0.14-internal"
+            xmlns:fx="http://javafx.com/fxml/1"
+                    fx:controller="com.front.app.RegisterController">
+
+      <Label layoutX="141.0" layoutY="145.0" text="Username" />
+      <Label layoutX="141.0" layoutY="177.0" text="Mot de passe" />
+
+       <Label layoutX="195.0" layoutY="272.0" text="Veuillez entrer vos informations" fx:id="welcomeText" />
+      <Button layoutX="256.0" layoutY="224.0" mnemonicParsing="false" onAction="#onButtonClick" text="Valider" />
+
+      <TextField layoutX="241.0" layoutY="141.0" />
+      <TextField layoutX="241.0" layoutY="173.0" />
+
+</AnchorPane>
