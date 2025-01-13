@@ -10,4 +10,6 @@ module com.front.app {
 
     opens com.front.app to javafx.fxml;
     exports com.front.app;
+    exports com.front.app.Controller;
+    opens com.front.app.Controller to javafx.fxml;
 }

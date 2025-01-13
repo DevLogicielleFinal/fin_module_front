@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.front.app.Controller.ProjectController">
+    <!-- Top Header with Add Button -->
+    <top>
+        <HBox spacing="10" style="-fx-padding: 10; -fx-background-color: #f0f0f0;">
+            <Label text="Project List" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button text="Add" fx:id="addButton" onAction="#handleAddButton" />
+        </HBox>
+    </top>
+
+    <!-- Center: Scrollable List of Projects -->
+    <center>
+        <ScrollPane fx:id="projectScrollPane" fitToWidth="true">
+            <VBox fx:id="projectList" spacing="10" style="-fx-padding: 10;">
+                <!-- Dynamically populated with project items -->
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <!-- Optional: Add Footer or Status Bar -->
+    <bottom>
+        <Label text="" fx:id="statusLabel" style="-fx-padding: 5; -fx-font-size: 12px;" />
+    </bottom>
+</BorderPane>
