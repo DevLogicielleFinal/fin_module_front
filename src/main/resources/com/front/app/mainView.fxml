@@ -4,8 +4,8 @@
 <?import javafx.scene.layout.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.front.app.Controller.ProjectController"
-            prefHeight="500" prefWidth="400">
+            fx:controller="com.front.app.Controller.MainController"
+            prefHeight="159.0" prefWidth="442.0">
 
     <!-- Header Section -->
     <top>
@@ -18,19 +18,22 @@
 
     <!-- Center Section -->
     <center>
-        <ScrollPane fx:id="projectScrollPane" fitToWidth="true">
-            <VBox fx:id="projectList" spacing="10" style="-fx-padding: 10;">
-                <!-- Projects will be dynamically populated -->
-                <Button text="Add Project" fx:id="AddProjectButton" onAction="#AddProjectButton" />
-            </VBox>
-        </ScrollPane>
+        <VBox alignment="CENTER" spacing="10" style="-fx-padding: 20;">
+            <Label text="Bienvenue !"
+                   style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+            <Label text="Commencez par vous identifier ou vous enregistrer :" />
+            <HBox spacing="10">
+                <Button text="Login" onAction="#goToLoginPage" />
+                <Button text="Register" onAction="#goToRegisterPage" />
+            </HBox>
+        </VBox>
     </center>
 
     <!-- Footer Section -->
     <bottom>
         <Label fx:id="statusLabel"
-               text="Vous êtes connecté. Voici vos projets ! Si vous n'en avez pas, créez-en un avec le bouton ci-dessus."
+               text="Connectez-vous ou inscrivez-vous !"
                style="-fx-padding: 5; -fx-font-size: 12px;" />
     </bottom>
-
 </BorderPane>
+

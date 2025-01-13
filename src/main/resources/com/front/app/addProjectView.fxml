@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.front.app.Controller.ForgotController"
+            fx:controller="com.front.app.Controller.AddProjectController"
             prefHeight="350" prefWidth="400">
 
     <!-- Header Section -->
@@ -18,20 +18,26 @@
 
     <!-- Center Section -->
     <center>
-        <VBox spacing="15" alignment="CENTER" style="-fx-padding: 20;">
-            <Label text="Mot de passe oublié"
+        <VBox alignment="CENTER" spacing="15" style="-fx-padding: 20;">
+            <Label text="Ajouter un projet"
                    style="-fx-font-size: 18px; -fx-font-weight: bold;" />
-            <TextField fx:id="emailField"
-                       promptText="Entrez votre adresse email"
+            <!-- Input Fields -->
+            <TextField fx:id="titleField"
+                       promptText="Titre du projet"
                        style="-fx-pref-width: 300px;" />
-            <HBox spacing="10" alignment="CENTER">
-                <Button text="Envoyer"
-                        fx:id="sendButton"
-                        onAction="#handleSendButton"
+            <TextArea fx:id="descriptionField"
+                      promptText="Description du projet"
+                      wrapText="true"
+                      style="-fx-pref-width: 300px; -fx-pref-height: 100px;" />
+            <!-- Buttons Section -->
+            <HBox alignment="CENTER" spacing="20">
+                <Button text="Ajouter"
+                        fx:id="addButton"
+                        onAction="#handleAddButton"
                         style="-fx-padding: 10; -fx-pref-width: 100px;" />
-                <Button text="Annuler"
-                        fx:id="cancelButton"
-                        onAction="#goToMainPage"
+                <Button text="Retour"
+                        fx:id="backButton"
+                        onAction="#goToProjectPage"
                         style="-fx-padding: 10; -fx-pref-width: 100px;" />
             </HBox>
         </VBox>
@@ -40,7 +46,8 @@
     <!-- Footer Section -->
     <bottom>
         <Label fx:id="statusLabel"
-               text="Entrez votre email pour réinitialiser votre mot de passe."
+               text="Remplissez les champs de votre projet !"
                style="-fx-padding: 5; -fx-font-size: 12px;" />
     </bottom>
+
 </BorderPane>

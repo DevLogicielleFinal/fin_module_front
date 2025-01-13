@@ -1,15 +1,20 @@
 package com.front.app.Controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.ScrollPane;
+import javafx.stage.Stage;
 
-public class ProjectController {
+import java.io.IOException;
 
-    @FXML
-    private Button addButton;
+public class ProjectController{
+
+
 
     @FXML
     private VBox projectList;
@@ -20,6 +25,7 @@ public class ProjectController {
     @FXML
     private Label statusLabel;
 
+
     @FXML
     private void initialize() {
         // Initialize the project list
@@ -27,10 +33,19 @@ public class ProjectController {
     }
 
     @FXML
-    private void handleAddButton() {
-        // Logic to navigate to the "Add Project" form
-        System.out.println("Add button clicked. Redirecting to Add Project page.");
-        statusLabel.setText("Redirecting to Add Project page...");
+    private void AddProjectButton(ActionEvent event) {
+        try {
+            // Charge le fichier addProjectView.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/front/app/addProjectView.fxml"));
+            Parent root = loader.load();
+
+            // Obtient la scène actuelle et remplace son contenu
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Add project");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void loadProjects() {
@@ -40,6 +55,5 @@ public class ProjectController {
             projectLabel.setStyle("-fx-padding: 5; -fx-border-color: lightgray; -fx-background-color: #f9f9f9;");
             projectList.getChildren().add(projectLabel);
         }
-        statusLabel.setText("Projects loaded successfully.");
     }
 }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.front.app.Controller.AddTaskController"
+            prefHeight="350" prefWidth="400">
+
+    <!-- Header Section -->
+    <top>
+        <HBox spacing="10" style="-fx-padding: 10; -fx-background-color: #f0f0f0;">
+            <Label text="Application de gestion de projet"
+                   style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+            <Region HBox.hgrow="ALWAYS" />
+        </HBox>
+    </top>
+
+    <!-- Center Section -->
+    <center>
+        <VBox alignment="CENTER" spacing="15" style="-fx-padding: 20;">
+            <Label text="Ajouter une tâche"
+                   style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+
+            <!-- Input Fields -->
+            <TextField fx:id="titleField"
+                       promptText="Titre de la tâche"
+                       style="-fx-pref-width: 300px;" />
+            <TextArea fx:id="descriptionField"
+                      promptText="Description de la tâche"
+                      wrapText="true"
+                      style="-fx-pref-width: 300px; -fx-pref-height: 100px;" />
+
+            <!-- ChoiceBox Fields -->
+            <ChoiceBox fx:id="etatField" style="-fx-pref-width: 300px;">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Sélectionnez un état" />
+                        <String fx:value="TO DO" />
+                        <String fx:value="En cours" />
+                        <String fx:value="Terminé" />
+                    </FXCollections>
+                </items>
+            </ChoiceBox>
+            <ChoiceBox fx:id="attributionField" style="-fx-pref-width: 300px;">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Sélectionnez une attribution" />
+                    </FXCollections>
+                </items>
+            </ChoiceBox>
+
+            <!-- Buttons -->
+            <HBox spacing="10" alignment="CENTER">
+                <Button text="Ajouter"
+                        fx:id="addButton"
+                        onAction="#handleAddButton"
+                        style="-fx-padding: 10; -fx-pref-width: 100px;" />
+                <Button text="Retour"
+                        fx:id="backButton"
+                        onAction="#goToTaskPage"
+                        style="-fx-padding: 10; -fx-pref-width: 100px;" />
+            </HBox>
+        </VBox>
+    </center>
+
+    <!-- Footer Section -->
+    <bottom>
+        <Label fx:id="statusLabel"
+               text="Remplissez les champs de votre tâche !"
+               style="-fx-padding: 5; -fx-font-size: 12px;" />
+    </bottom>
+
+</BorderPane>

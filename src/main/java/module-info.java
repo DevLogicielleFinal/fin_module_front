@@ -7,6 +7,7 @@ module com.front.app {
     requires net.synedra.validatorfx;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
+    requires java.desktop;
 
     opens com.front.app to javafx.fxml;
     exports com.front.app;

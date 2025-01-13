@@ -10,56 +10,43 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class ForgotController {
-
-    @FXML
-    private Button backButton;
-
-    @FXML
-    private Button homeButton;
-
-    @FXML
-    private Button sendButton;
+public class ForgotController{
 
     @FXML
     private TextField emailField;
 
     @FXML
-    private void handleBackButton() {
-        // Logic to navigate to the Sign-Up page
-        System.out.println("Back button clicked. Navigating to Sign-Up page.");
-    }
-
-    @FXML
-    private void handleHomeButton(ActionEvent event) {
+    private void goToMainPage(ActionEvent event) {
         try {
-            // Charge le fichier forgotView.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/front/app/registerView.fxml"));
+            // Charge le fichier mainView.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/front/app/mainView.fxml"));
             Parent root = loader.load();
 
-            // Obtient la scène actuelle et remplace son contenu
             Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Regisster");
+            stage.setTitle("Projet");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @FXML
-    private void handleSendButton() {
+    private void handleSendButton(ActionEvent event) {
         String email = emailField.getText().trim();
         if (email.isEmpty()) {
-            showAlert("Error", "Please enter an email address.", AlertType.ERROR);
+            showAlert("Error", "Veuillez entrez une adresse mail.", AlertType.ERROR);
         } else {
             // Simulate sending the reset email
             System.out.println("Sending reset email to: " + email);
             emailField.clear();
-            showAlert("Success", "The email to reset your password has been sent!", AlertType.INFORMATION);
+            showAlert("Success", "L'email pour mettre à jour votre mot de passe a été envoyer.", AlertType.INFORMATION);
+            goToMainPage(event);
+
         }
     }
 

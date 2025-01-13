@@ -3,37 +3,43 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.front.app.Controller.RegisterController">
+<BorderPane xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.front.app.Controller.RegisterController"
+            prefHeight="350" prefWidth="400">
 
-    <left>
-        <VBox spacing="10" style="-fx-padding: 10; -fx-background-color: #f0f0f0;">
-
-            <Button text="Home" fx:id="homeButton" onAction="#handleHomeButton" style="-fx-padding: 5;" />
-        </VBox>
-    </left>
-
+    <!-- Header Section -->
     <top>
         <HBox spacing="10" style="-fx-padding: 10; -fx-background-color: #f0f0f0;">
-            <Label text="Register" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+            <Label text="Application de gestion de projet"
+                   style="-fx-font-size: 18px; -fx-font-weight: bold;" />
             <Region HBox.hgrow="ALWAYS" />
-            <Hyperlink layoutX="179.0" layoutY="249.0" text="Mot de passe oublié ?" onAction="#goToForgotPage"/>
         </HBox>
     </top>
+
+    <!-- Center Section -->
     <center>
-        <ScrollPane fx:id="RegisterPane" fitToWidth="true">
-            <VBox fx:id="RegisterVB" spacing="10" style="-fx-padding: 10;">
-                <Label text="Email :" />
-                <TextField fx:id="inputEmail"/>
-                <Label text="Password :" />
-                <TextField fx:id="inputPwd"/>
-                <Button mnemonicParsing="false" onAction="#onButtonClick" text="Valider" />
-            </VBox>
-        </ScrollPane>
+        <VBox alignment="CENTER" spacing="15" style="-fx-padding: 20;">
+            <Label text="Créer un compte"
+                   style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+            <Label text="Nom d'utilisateur :" />
+            <TextField fx:id="inputUsername" promptText="Entrez votre nom d'utilisateur" />
+            <Label text="Email :" />
+            <TextField fx:id="inputEmail" promptText="Entrez votre adresse email" />
+            <Label text="Mot de passe :" />
+            <PasswordField fx:id="inputPassword" promptText="Entrez votre mot de passe" />
+            <Label text="Confirmer le mot de passe :" />
+            <PasswordField fx:id="inputConfirmPassword" promptText="Confirmez votre mot de passe" />
+            <HBox alignment="CENTER" spacing="10">
+                <Button mnemonicParsing="false" onAction="#registerClick" text="Valider" />
+                <Button mnemonicParsing="false" onAction="#goToLoginPage" text="Connectez-vous" />
+            </HBox>
+        </VBox>
     </center>
+
+    <!-- Footer Section -->
     <bottom>
-        <Label text="Veuillez entrer vos informations" fx:id="statusLabel" style="-fx-padding: 5; -fx-font-size: 12px;" />
+        <Label fx:id="statusLabel"
+               text="Entrez vos informations pour vous enregistrer."
+               style="-fx-padding: 5; -fx-font-size: 12px;" />
     </bottom>
-
 </BorderPane>
-
