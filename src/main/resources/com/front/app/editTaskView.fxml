@@ -2,9 +2,8 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <BorderPane xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.front.app.Controller.AddTaskController"
+            fx:controller="com.front.app.Controller.EditTaskController"
             prefHeight="350" prefWidth="400">
 
     <!-- Header Section -->
@@ -19,27 +18,17 @@
     <!-- Center Section -->
     <center>
         <VBox alignment="CENTER" spacing="15" style="-fx-padding: 20;">
-            <Label text="Ajouter une tâche"
+            <Label text="Modifier une tâche"
                    style="-fx-font-size: 18px; -fx-font-weight: bold;" />
 
-            <!-- Input Fields -->
-            <TextField fx:id="titleField"
-                       promptText="Titre de la tâche"
-                       style="-fx-pref-width: 300px;" />
-            <TextArea fx:id="descriptionField"
-                      promptText="Description de la tâche"
-                      wrapText="true"
-                      style="-fx-pref-width: 300px; -fx-pref-height: 100px;" />
-
             <!-- ChoiceBox Fields -->
-            <ComboBox fx:id="statusComboBox" promptText="État de la tâche" />
-            <ComboBox fx:id="usersComboBox" promptText="Attribuer à un utilisateur" />
+            <ComboBox fx:id="stateComboBox" promptText="État de la tâche" />
 
             <!-- Buttons -->
             <HBox spacing="10" alignment="CENTER">
-                <Button text="Ajouter"
-                        fx:id="addButton"
-                        onAction="#handleAddButton"
+                <Button text="Modifier"
+                        fx:id="saveButton"
+                        onAction="#handleSaveButton"
                         style="-fx-padding: 10; -fx-pref-width: 100px;" />
                 <Button text="Retour"
                         fx:id="backButton"
@@ -57,3 +46,4 @@
     </bottom>
 
 </BorderPane>
+

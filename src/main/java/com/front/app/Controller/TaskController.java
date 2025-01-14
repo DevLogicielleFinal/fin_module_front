@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.ScrollPane;
@@ -14,6 +15,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import javafx.scene.control.Button;
 
 import com.front.app.SessionManager;
 
@@ -31,11 +33,34 @@ public class TaskController {
 
     @FXML
     private ScrollPane taskScrollPane;
+    private boolean isInitialized = false;
     private String projectId;
 
     public void setProjectId(String projectId) {
         this.projectId = projectId;
-        loadTasks();
+        System.out.println("Set Project Id: " + projectId);
+
+        if (!isInitialized) {
+            // Appeler la méthode de chargement après l'initialisation
+            loadTasks();
+            isInitialized = true;
+        }
+    }
+
+    @FXML
+    private void goToProjectPage(ActionEvent event) {
+        try {
+            // Charge le fichier forgotView.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/front/app/projectView.fxml"));
+            Parent root = loader.load();
+
+            // Obtient la scène actuelle et remplace son contenu
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Projet");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -45,6 +70,9 @@ public class TaskController {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/front/app/addTaskView.fxml"));
                 Parent root = loader.load();
 
+                AddTaskController addTaskController = loader.getController();
+                addTaskController.setProjectId(projectId);
+
                 // Obtient la scène actuelle et remplace son contenu
                 Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
                 stage.setScene(new Scene(root));
@@ -52,6 +80,24 @@ public class TaskController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+    }
+
+    private void modifyTask(String taskId) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/front/app/editTaskView.fxml"));
+            Parent root = loader.load();
+
+            // Passer l'ID de la tâche au contrôleur de la vue d'édition
+            EditTaskController editTaskController = loader.getController();
+            editTaskController.setTaskId(taskId);
+
+            Stage stage = (Stage) taskList.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Modifier la tâche");
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible de charger la vue de modification.", Alert.AlertType.ERROR);
+        }
     }
 
     private void loadTasks() {
@@ -97,13 +143,30 @@ public class TaskController {
     private void displayTasks(String jsonResponse) {
         taskList.getChildren().clear();
         String[] tasks = jsonResponse.split("\\},\\{");
+
         for (String task : tasks) {
+            String taskId = extractValue(task, "id");
             String name = extractValue(task, "name");
             String description = extractValue(task, "description");
+            String state = extractValue(task, "state");
 
-            Label taskLabel = new Label("Nom : " + name + " - Description : " + description);
-            taskLabel.setStyle("-fx-padding: 5; -fx-border-color: lightgray; -fx-background-color: #f9f9f9;");
-            taskList.getChildren().add(taskLabel);
+            // Conteneur pour la tâche (Label + Bouton)
+            VBox taskContainer = new VBox();
+            taskContainer.setSpacing(5);
+            taskContainer.setStyle("-fx-padding: 10; -fx-border-color: lightgray; -fx-background-color: #f9f9f9;");
+
+            // Affichage des détails de la tâche
+            Label taskLabel = new Label("Nom : " + name + "\nDescription : " + description + "\nÉtat : " + state);
+
+            // Bouton pour modifier la tâche
+            Button modifyButton = new Button("Modifier");
+            modifyButton.setOnAction(event -> modifyTask(taskId));
+
+            // Ajouter les éléments au conteneur
+            taskContainer.getChildren().addAll(taskLabel, modifyButton);
+
+            // Ajouter le conteneur au VBox principal
+            taskList.getChildren().add(taskContainer);
         }
     }
 
@@ -124,4 +187,13 @@ public class TaskController {
             return json.substring(startIndex, endIndex).trim();
         }
     }
+
+    private void showAlert(String title, String message, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 }
