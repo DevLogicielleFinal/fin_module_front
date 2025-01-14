@@ -5,12 +5,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import com.front.app.SessionManager;
 
 import java.io.IOException;
 
@@ -46,15 +50,53 @@ public class AddProjectController{
         if (title.isEmpty() || description.isEmpty()) {
             showAlert("Error", "Le titre et la description sont requis.", AlertType.ERROR);
         } else {
-            // Simulate adding the project to the database
-            System.out.println("Project added: Title - " + title + ", Description - " + description);
+            try {
+                // Préparation des données JSON
+                String jsonInput = String.format("{\"name\":\"%s\",\"description\":\"%s\"}", title, description);
 
-            // Clear the fields after adding
-            titleField.clear();
-            descriptionField.clear();
+                // URL de l'API
+                URL url = new URL("http://localhost:8080/api/projects");
 
-            showAlert("Success", "Projet ajouté avec succès!", AlertType.INFORMATION);
-            goToProjectPage(event);
+                // Connexion HTTP
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/json; utf-8");
+                connection.setRequestProperty("Accept", "application/json");
+
+                // Ajout du token JWT dans l'en-tête Authorization
+                String jwtToken = SessionManager.getJwtToken();
+                if (jwtToken == null || jwtToken.isEmpty()) {
+                    showAlert("Error", "Token JWT manquant. Veuillez vous reconnecter.", AlertType.ERROR);
+                    return;
+                }
+                connection.setRequestProperty("Authorization", "Bearer " + jwtToken);
+                connection.setDoOutput(true);
+
+                // Envoi des données
+                try (OutputStream os = connection.getOutputStream()) {
+                    byte[] input = jsonInput.getBytes(StandardCharsets.UTF_8);
+                    os.write(input, 0, input.length);
+                }
+
+                // Lecture de la réponse
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
+                    showAlert("Success", "Projet ajouté avec succès!", AlertType.INFORMATION);
+
+                    // Efface les champs après ajout
+                    titleField.clear();
+                    descriptionField.clear();
+
+                    // Redirige vers la page des projets
+                    goToProjectPage(event);
+                } else {
+                    showAlert("Error", "Échec de l'ajout du projet. Code : " + responseCode, AlertType.ERROR);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Error", "Une erreur s'est produite lors de l'ajout du projet.", AlertType.ERROR);
+            }
         }
     }
 

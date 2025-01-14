@@ -5,14 +5,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
-
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.IOException;
+import com.front.app.SessionManager;
 
 public class LoginController{
 
@@ -46,15 +49,62 @@ public class LoginController{
         if (password.isEmpty() || email.isEmpty()) {
             showAlert("Error", "L'email et le mot de passe sont requis.", Alert.AlertType.ERROR);
         } else {
-            // Simulate adding the project to the database
-            System.out.println("Connexion confirmer: Email - " + email);
+            try {
+                // Préparation des données JSON
+                String jsonInput = String.format("{\"email\":\"%s\",\"password\":\"%s\"}", email, password);
 
-            // Clear the fields after adding
-            inputPassword.clear();
-            inputEmail.clear();
+                // URL de l'API
+                URL url = new URL("http://localhost:8080/auth/login");
 
-            showAlert("Success", "Connexion établie!", Alert.AlertType.INFORMATION);
-            goToProjectPage(event);
+                // Connexion HTTP
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/json; utf-8");
+                connection.setRequestProperty("Accept", "application/json");
+                connection.setDoOutput(true);
+
+                // Envoi des données
+                try (OutputStream os = connection.getOutputStream()) {
+                    byte[] input = jsonInput.getBytes(StandardCharsets.UTF_8);
+                    os.write(input, 0, input.length);
+                }
+
+                // Lecture de la réponse
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    // Récupérer le token JWT depuis la réponse
+                    StringBuilder response = new StringBuilder();
+                    try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+                        String responseLine;
+                        while ((responseLine = br.readLine()) != null) {
+                            response.append(responseLine.trim());
+                        }
+                    }
+
+                    // Extraire le token du JSON
+                    String jwtToken = response.toString();
+
+
+                    // Stocker le token dans le SessionManager
+                    SessionManager.setJwtToken(jwtToken);
+                    System.out.println("Token:" + jwtToken);
+
+                    showAlert("Success", "Connexion réussie !", Alert.AlertType.INFORMATION);
+
+                    // Effacer les champs après connexion
+                    inputPassword.clear();
+                    inputEmail.clear();
+
+                    // Rediriger vers la page des projets
+                    goToProjectPage(event);
+                } else {
+                    showAlert("Error", "Échec de la connexion. Code : " + responseCode, Alert.AlertType.ERROR);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Error", "Une erreur s'est produite lors de la connexion.", Alert.AlertType.ERROR);
+            }
         }
     }
 

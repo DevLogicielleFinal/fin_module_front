@@ -13,6 +13,7 @@
             <Label text="Application de gestion de projet"
                    style="-fx-font-size: 18px; -fx-font-weight: bold;" />
             <Region HBox.hgrow="ALWAYS" />
+            <Button text="Add Task" fx:id="AddTaskButton" onAction="#AddTaskButton" />
         </HBox>
     </top>
 
@@ -21,7 +22,7 @@
         <ScrollPane fx:id="taskScrollPane" fitToWidth="true">
             <VBox fx:id="taskList" spacing="10" style="-fx-padding: 10;">
                 <!-- Projects will be dynamically populated -->
-                <Button text="Add Task" fx:id="AddTaskButton" onAction="#AddTaskButton" />
+
             </VBox>
         </ScrollPane>
     </center>

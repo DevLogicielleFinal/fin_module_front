@@ -5,13 +5,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
-
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.io.IOException;
 
 public class RegisterController {
@@ -52,19 +53,50 @@ public class RegisterController {
         String email = inputEmail.getText().trim();
 
         if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || email.isEmpty()) {
-            showAlert("Error", "Tous les champs doivent être remplis. Le mot de passe et sa confirmation doivent être identique.", Alert.AlertType.ERROR);
+            showAlert("Error", "Tous les champs doivent être remplis.", Alert.AlertType.ERROR);
+        } else if(!password.equals(confirmPassword)) {
+            showAlert("Error", "Le mot de passe et sa confirmation doivent être identique.", Alert.AlertType.ERROR);
         } else {
-            // Simulate adding the project to the database
-            System.out.println("Registration added: Username - " + username + ", Email - " + email);
+            try {
+                // Préparation des données JSON
+                String jsonInput = String.format("{\"username\":\"%s\",\"email\":\"%s\",\"password\":\"%s\"}", username, email, password);
 
-            // Clear the fields after adding
-            inputUsername.clear();
-            inputPassword.clear();
-            inputConfirmPassword.clear();
-            inputEmail.clear();
+                // URL de l'API
+                URL url = new URL("http://localhost:8080/users/register");
 
-            showAlert("Success", "Utilisateur crée avec succès!", Alert.AlertType.INFORMATION);
-            goToLoginPage(event);
+                // Connexion HTTP
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/json; utf-8");
+                connection.setRequestProperty("Accept", "application/json");
+                connection.setDoOutput(true);
+
+                // Envoi des données
+                try (OutputStream os = connection.getOutputStream()) {
+                    byte[] input = jsonInput.getBytes(StandardCharsets.UTF_8);
+                    os.write(input, 0, input.length);
+                }
+
+                // Récupération de la réponse
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
+                    showAlert("Success", "Utilisateur créé avec succès!", Alert.AlertType.INFORMATION);
+
+                    // Efface les champs après le succès
+                    inputUsername.clear();
+                    inputPassword.clear();
+                    inputConfirmPassword.clear();
+                    inputEmail.clear();
+
+                    goToLoginPage(event);
+                } else {
+                    showAlert("Error", "Échec de la création de l'utilisateur. Code : " + responseCode, Alert.AlertType.ERROR);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Error", "Une erreur s'est produite lors de l'enregistrement.", Alert.AlertType.ERROR);
+            }
         }
     }
 
