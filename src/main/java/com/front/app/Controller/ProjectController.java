@@ -34,6 +34,22 @@ public class ProjectController {
         // Charger les projets via l'API
         loadProjects();
     }
+    @FXML
+    private void JoinProjectButton(ActionEvent event) {
+        try {
+            // Charge la vue joinProjectView.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/front/app/joinProjectView.fxml"));
+            Parent root = loader.load();
+
+            // Obtient la scène actuelle et remplace son contenu
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Add project");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
     @FXML
     private void AddProjectButton(ActionEvent event) {
